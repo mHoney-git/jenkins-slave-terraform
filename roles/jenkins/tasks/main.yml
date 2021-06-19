@@ -1,0 +1,52 @@
+---
+- name: Install Openjdk
+  yum:
+    name: "{{java.VERSION}}"
+    state: present
+  become: true
+
+- name: Correct alternatives to change default java version
+  alternatives: 
+    name: java
+    link: /bin/java
+    path: "{{java.ALTERNATIVES}}"
+
+- name: Download Jenkins.repo
+  get_url: 
+    url: "{{jenkins.repo_URL}}"
+    dest: /etc/yum.repos.d/jenkins.repo
+  become: true
+
+- name: Import Jenkins Key
+  rpm_key: 
+    state: present
+    key: "{{jenkins.gpg_key}}"
+
+- name: Install Jenkins
+  yum:
+    name: jenkins
+    state: present
+
+- name: change jenkins java options
+  lineinfile:
+    dest=/etc/sysconfig/jenkins
+    regexp=^JENKINS_JAVA_OPTIONS=
+    line=JENKINS_JAVA_OPTIONS="{{jenkins.JAVA_OPTIONS}}"
+  become: true
+
+- name: Start Jenkins
+  service:
+    name: jenkins
+    state: started
+    enabled: yes
+
+      # - name: sleep for 30 seconds and continue with play
+      #   wait_for: timeout=30
+      #   delegate_to: localhost
+      # - name: init password jenkin
+      #   shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      #   changed_when: false
+      #   register: result
+      # - name: print init password jenkins
+      #   debug:
+      #     var: result.stdout
