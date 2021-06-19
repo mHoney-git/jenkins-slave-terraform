@@ -5,11 +5,11 @@
     state: present
   become: true
 
-- name: Correct alternatives to change default java version
-  alternatives: 
-    name: java
-    link: /bin/java
-    path: "{{java.ALTERNATIVES}}"
+# - name: Correct alternatives to change default java version
+#   alternatives: 
+#     name: java
+#     link: /bin/java
+#     path: "{{java.ALTERNATIVES}}"
 
 - name: Download Jenkins.repo
   get_url: 
