@@ -31,8 +31,8 @@
         state: started
         enabled: true
 
-    - name: Sleep for 30 seconds and continue with play
-      wait_for: timeout=30
+    # - name: Sleep for 30 seconds and continue with play
+    #   wait_for: timeout=30
 
     # - name: Get init password jenkins
     #   shell: cat /var/lib/jenkins/secrets/initialAdminPassword
